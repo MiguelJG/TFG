@@ -10,7 +10,7 @@ import lib.Node;
  * @author Miguel Jiménez Gomis
  * @email jimenezgomismiguel@gmail.com
  * 
- * This class implements the creation of an artifficial graph structure with the given paramenters and computes the 
+ * This class implements the creation of an artificial graph structure with the given paramenters and computes the 
  * methodology with it
  */
 public class ArtifficialTest {		
@@ -22,15 +22,16 @@ public class ArtifficialTest {
 	 * @param numClusters  Number of clusters that the graph will have
 	 * @param clusterSize Number of elements of each graph
 	 * @param clusterConexion	percentage of nodes linked between graphs
+	 * @param	numSolapCom number of solaping communities
 	 */
-	private void createData(int numClusters, int clusterSize, double clusterConexion) {
-		for(int i = 0; i < numClusters; i++) {//initial data with separated clusters
+	private void createData(int numClusters, int clusterSize,int numSolapCom , double clusterConexion) {
+		for(int i = 0; i < numClusters; i++) {//initial data with separated clusters //TODO Las comunidades solapadas son elementos en varias comunidades a la vez
 			ArrayList<Node> temp = new ArrayList<Node>();
 			for(int j = 0; j < clusterSize; j++) { //nodes id added
-				temp.add(new Node((i + "" + j), new ArrayList<String>()));
+				temp.add(new Node((i + "|" + j), new ArrayList<String>()));
 				for(int k = 0; k < clusterSize; k++) { //links are added
 					if(k != j) {
-						temp.get(j).addLink((i + "" + k));
+						temp.get(j).addLink((i + "|" + k));
 					}
 				}
 			}
@@ -38,14 +39,16 @@ public class ArtifficialTest {
 		}
 		for(int i = 0; i < numClusters; i++) { //links between clusters
 			for(int k = 0; k < (clusterSize * (clusterConexion / 100)); k++) {
-				for(int j = 0; j < clusterSize; j++) {		
-						data.get(i).get(j).addLink((i + "" + j));//TODO Repensar aquí se tienen que generar el numero de comunidades solapadas adecuadas
+				for(int j = 0; j < clusterSize; j++) {	
+					if(k != j) {
+						data.get(i).get(k).addLink((i + "|" + j));
+					}
 				}
 			}
 		}
 	}
 	
-	/** This method generates the initial graph in wich we will compute the results
+	/** This method generates the initial graph in which we will compute the results
 	 * @param initialNodes Percentage of nodes that will be in the initial graph
 	 */
 	private void generateGrpah(int numClusters,int clusterSize,  Double initialNodes) {		
@@ -74,14 +77,16 @@ public class ArtifficialTest {
 	}
 	
 	/** This method generates and computes the methodology for the given parameters
-	 * @param numClusters
-	 * @param clusterSize
-	 * @param clusterConexio
+	 * @param numClusters total number of clusters
+	 * @param clusterSize Size of the different clusters
+	 * @param numSolapCom number of solaping communities 
+	 * @param clusterConexion	percentage of links between clusters 
+	 * @param initialNodes percentage of nodes that will be in the initial cluster
 	 * @return
 	 */
-	public ArrayList<Double> compute(int numClusters, int clusterSize, double clusterConexio, double initialNodes) {
+	public ArrayList<Double> compute(int numClusters, int clusterSize, int numSolapCom, double clusterConexion, double initialNodes) {
 		ArrayList<Double> results = new ArrayList<Double>();
-		this.createData(numClusters, clusterSize, clusterConexio);
+		this.createData(numClusters, clusterSize, numSolapCom, clusterConexion);
 		this.generateGrpah(numClusters, clusterSize, initialNodes);
 		//TODO generate results with the methodology method
 		return results;
