@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry including="Experimentation/|HelloJGraphT.java|Pruebas.java|helloworld.java|lib/" kind="src" path="src"/>
+	<classpathentry including="Experimentation/|HelloJGraphT.java|Metrics/|Pruebas.java|helloworld.java|lib/" kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/migue/eclipse-workspace/TFG_/jgrapht-1.3.0/lib/antlr4-runtime-4.7.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/migue/eclipse-workspace/TFG_/jgrapht-1.3.0/lib/commons-lang3-3.8.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/migue/eclipse-workspace/TFG_/jgrapht-1.3.0/lib/commons-text-1.5.jar"/>

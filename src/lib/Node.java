@@ -80,5 +80,9 @@ public class Node {
 		this.links = links;
 	}
 	
+	public String toString() {
+		return "{" + Id + "," + links + "}";
+	}
+	
 	
 }
