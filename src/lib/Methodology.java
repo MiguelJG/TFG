@@ -155,7 +155,7 @@ public class Methodology {
 	 * Option 3
 	 * @return
 	 */
-	public static double averageDegree(int community, Graph<String, DefaultEdge> G, ArrayList<ArrayList<Node>> solution) {
+	public double averageDegree(int community, Graph<String, DefaultEdge> G, ArrayList<ArrayList<Node>> solution) {
 		ArrayList<String> e = new ArrayList<String>(); //number of links with both vertex in the same community
 		ArrayList<String> c = new ArrayList<String>(); //total number of links of the community
 		for(Node vertex : solution.get(community)) {
