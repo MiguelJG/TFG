@@ -13,8 +13,8 @@ import com.google.common.collect.Lists;
 public class LED {
 	public ArrayList<ArrayList<Node>> solution;	//Generated clusters
 	ArrayList<Node> independetnNodes;
-	Graph<String, DefaultEdge> G;		//General graph of the problem
-	
+	Graph<String, DefaultEdge> G = new DefaultDirectedGraph<>(DefaultEdge.class);		//General graph of the problem
+	Graph<String, DefaultEdge> Ginitial = new DefaultDirectedGraph<>(DefaultEdge.class);
 	
 	/** Constructor from file
 	 * @param Filename
@@ -22,15 +22,17 @@ public class LED {
 	public LED(String Filename) {
 		solution = new ArrayList<ArrayList<Node>>();
 		GraphIO.loadGraph(G, Filename);
+		GraphIO.loadGraph(Ginitial, Filename);
 		independetnNodes = new ArrayList<>();
 	}
 	
 	/** Contructor from JGraphT Graph
 	 * @param G
 	 */
-	public LED(Graph<String, DefaultEdge> G) {
+	public LED(Graph<String, DefaultEdge> G, Graph<String, DefaultEdge> G2) {
 		solution = new ArrayList<ArrayList<Node>>();
 		this.G= G;
+		this.Ginitial= G2;
 		independetnNodes = new ArrayList<>();
 	}	
 	
@@ -60,8 +62,11 @@ public class LED {
 		for(DefaultEdge edge : Lists.reverse(edgeListi)) { 
 			overlapping(edge);
 		}
-		for(Node node : independetnNodes) { // extend initial communities adding isolated vertices
-			addTohihgestStrSim(node);
+		while(independetnNodes.size() > 0) {
+			for(int i = 0; i < independetnNodes.size(); i++) { // extend initial communities adding isolated vertices
+				addTohihgestStrSim(independetnNodes.get(i));
+				System.out.println("Add to hihges: " + independetnNodes.get(i));
+			}
 		}
 	}
 	
@@ -70,31 +75,37 @@ public class LED {
 	 * @param G
 	 * @param alpha
 	 */
-	private void edgeDelete(ArrayList<DefaultEdge> edgeListi, Graph<String, DefaultEdge> G, Double alpha) {
+	private void edgeDelete(ArrayList<DefaultEdge> edgeListi, Graph<String, DefaultEdge> SubG, Double alpha) {
 		//Delete edges
-		for(DefaultEdge edge : G.edgeSet()) {
-			Double temp = calcStructSim(edge, G);
+		for(DefaultEdge edge : SubG.edgeSet()) {
+			Double temp = calcStructSim(edge, SubG);
 			if(temp < alpha) {
 				edgeListi.add(edge); // no se elimina directamente para poder calcular la similaridad estructural correctamente
 			}
 		}
 		for(DefaultEdge edge : edgeListi) {
-			G.removeEdge(edge);
+			SubG.removeEdge(edge);
 		}
 		//Check for different interconnected components 
-		ConnectivityInspector<String, DefaultEdge> connectivity = new ConnectivityInspector<String, DefaultEdge>(G);
-		List<Set<String>> interconnectedComponents = connectivity.connectedSets();		
+		ConnectivityInspector<String, DefaultEdge> connectivity = new ConnectivityInspector<String, DefaultEdge>(SubG);
+		List<Set<String>> interconnectedComponents = connectivity.connectedSets();
 		if(interconnectedComponents.size() == 1) { // si solo hay un componente, eso quiere decir que no se puede separar mas asi que se marca como comunidad
 			ArrayList<Node> community = new ArrayList<Node>();
 			for(String vertex : interconnectedComponents.get(0)) {
 				ArrayList<String> edges = new ArrayList<String>();
-				for(DefaultEdge str : G.edgesOf(vertex)) {
-					edges.add(G.getEdgeSource(str).equals(vertex)?G.getEdgeTarget(str):G.getEdgeSource(str));
+				for(String str : Graphs.neighborListOf(this.Ginitial, vertex)) {
+					edges.add(str);
 				}
 				community.add(new Node(vertex, edges));				
 			}
 			if(community.size() == 1) {
-				independetnNodes.add(community.get(0));
+				Node temp = community.get(0);
+				ArrayList<String> temp2 = new ArrayList<String>();
+				for(String str : Graphs.neighborListOf(this.Ginitial, temp.getId())) {
+					temp2.add(str);
+				}
+				temp.setLinks(temp2);
+				independetnNodes.add(temp);
 			} else { //si la componente tiene mas de un elemento se marca como comunidad inicial
 				this.solution.add(community);
 				System.out.println("Comunidad inicial detectada");
@@ -102,12 +113,12 @@ public class LED {
 		} else {
 			for(Set<String> commponent : interconnectedComponents) {
 				Graph<String, DefaultEdge> subG = new DefaultDirectedGraph<>(DefaultEdge.class);
-				for(String str : commponent) {
+				for(String str : commponent) {					
 					subG.addVertex(str);
 				}
 				for(String str : commponent) {
-					for(DefaultEdge edg : G.edgesOf(str)) {
-						subG.addEdge(G.getEdgeSource(edg), G.getEdgeTarget(edg));
+					for(DefaultEdge edg : SubG.edgesOf(str)) {
+						subG.addEdge(SubG.getEdgeSource(edg), SubG.getEdgeTarget(edg));
 					}
 				}
 				edgeDelete(edgeListi, subG, alpha);
@@ -157,21 +168,28 @@ public class LED {
 		//TODO revisar ----------------------------------------------------
 		int community = -1;
 		Double structSim = 0.0;
+		if(node.getId().equals("5")) {
+			System.out.println("5:--- " + node.getLinks());
+		}
 		for(String vertice : node.getLinks()) {
 			String id = node.getId();
-			DefaultEdge temp = G.getEdge(id, vertice);
+			DefaultEdge temp = Ginitial.getEdge(id, vertice);
 			if(temp == null) {
-				temp = G.getEdge(vertice,id);
-				Double dummy = calcStructSim(temp,this.G);
-				if(structSim < dummy) {
-					structSim = dummy;
-					community = getCommunity(id);
+				temp = Ginitial.getEdge(vertice,id);
+				Double dummy = calcStructSim(temp,this.Ginitial);
+				if(structSim < dummy) {					
+					int newcommunity = getCommunity(vertice);
+					if(newcommunity != -1)
+						community = newcommunity;
+						structSim = dummy;
 				}
 			}else {
-				Double dummy = calcStructSim(temp,this.G);
+				Double dummy = calcStructSim(temp,this.Ginitial);
 				if(structSim < dummy) {
-					structSim = dummy;
-					community = getCommunity(vertice);
+					int newcommunity = getCommunity(vertice);	
+					if(newcommunity != -1)
+						community = newcommunity;
+						structSim = dummy;
 				}
 			}
 		}
@@ -179,11 +197,12 @@ public class LED {
 			ArrayList<Node> temp = this.solution.get(community);
 			temp.add(node);
 			this.solution.set(community, temp);
-		}else {
+			independetnNodes.remove(node);
+		}/*else {
 			ArrayList<Node> temp = new ArrayList<Node>();
 			temp.add(node);
 			this.solution.add(temp);
-		}
+		}*/
 	}
 	
 	/** Calculates the structural similarity of 2 vertices
@@ -191,9 +210,9 @@ public class LED {
 	 * @param G
 	 * @return
 	 */
-	private Double calcStructSim(DefaultEdge edge, Graph<String, DefaultEdge> G) {
-		Set<String> u = Graphs.neighborSetOf(G, G.getEdgeSource(edge));
-		Set<String> v = Graphs.neighborSetOf(G, G.getEdgeTarget(edge));
+	private Double calcStructSim(DefaultEdge edge, Graph<String, DefaultEdge> SubG) {
+		Set<String> u = Graphs.neighborSetOf(SubG, SubG.getEdgeSource(edge));
+		Set<String> v = Graphs.neighborSetOf(SubG, SubG.getEdgeTarget(edge));
 		int uSize = u.size();
 		int vSize = v.size();
 		u.retainAll(v);
