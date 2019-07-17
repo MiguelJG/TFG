@@ -7,14 +7,15 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultUndirectedGraph;
 
 import com.google.common.collect.Lists;
 
 public class LED {
 	public ArrayList<ArrayList<Node>> solution;	//Generated clusters
 	ArrayList<Node> independetnNodes;
-	Graph<String, DefaultEdge> G = new DefaultDirectedGraph<>(DefaultEdge.class);		//General graph of the problem
-	Graph<String, DefaultEdge> Ginitial = new DefaultDirectedGraph<>(DefaultEdge.class);
+	Graph<String, DefaultEdge> G = new  DefaultUndirectedGraph<>(DefaultEdge.class);		//General graph of the problem
+	Graph<String, DefaultEdge> Ginitial = new  DefaultUndirectedGraph<>(DefaultEdge.class);
 	
 	/** Constructor from file
 	 * @param Filename
@@ -61,13 +62,51 @@ public class LED {
 		//Step 3 Identify overlapping vertices
 		for(DefaultEdge edge : Lists.reverse(edgeListi)) { 
 			overlapping(edge);
+		}		
+		ArrayList<Node> previndependetnNodes = new ArrayList<Node>();
+		for(Node nd : independetnNodes) {
+			previndependetnNodes.add(nd);
 		}
-		while(independetnNodes.size() > 0) {
+		Boolean changeDetected = true;
+		while(independetnNodes.size() > 0 && changeDetected) {
 			for(int i = 0; i < independetnNodes.size(); i++) { // extend initial communities adding isolated vertices
-				addTohihgestStrSim(independetnNodes.get(i));
 				System.out.println("Add to hihges: " + independetnNodes.get(i));
+				addTohihgestStrSim(independetnNodes.get(i));
+			}
+			//if(previndependetnNodes.equals(independetnNodes)) {
+			if(ArrayListEquals(previndependetnNodes, independetnNodes)) {
+				for(Node nd : independetnNodes) {
+					previndependetnNodes.add(nd);
+				}
+			}else {
+				changeDetected = false;
 			}
 		}
+		ArrayList<Node> independentNodesfcomm = new ArrayList();
+		for(int i = 0; i < independetnNodes.size(); i++) {
+			independentNodesfcomm.add(independetnNodes.get(i));
+		}
+		solution.add(independentNodesfcomm);
+	}
+	
+	private Boolean ArrayListEquals(ArrayList<Node> A, ArrayList<Node> B) {
+		if(A.size() != B.size()) {
+			return false;
+		} else {
+			
+		}
+		for(Node nda : A) {
+			int found = 0;
+			for(Node ndb : B) {
+				if(nda.getId().equals(ndb.getId())) {
+					found++;
+				}
+			}
+			if(found != A.size()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/** Delete all the edgest with a struct sim lesser than alpha and recursively calculates the subgraphs generated until nothing gets deleted or there is just 1 element
@@ -166,6 +205,7 @@ public class LED {
 	 */
 	void addTohihgestStrSim(Node node) {
 		//TODO revisar ----------------------------------------------------
+		/*
 		int community = -1;
 		Double structSim = 0.0;
 		if(node.getId().equals("5")) {
@@ -198,11 +238,63 @@ public class LED {
 			temp.add(node);
 			this.solution.set(community, temp);
 			independetnNodes.remove(node);
-		}/*else {
+		}*/
+		/*else {
 			ArrayList<Node> temp = new ArrayList<Node>();
 			temp.add(node);
 			this.solution.add(temp);
 		}*/
+		if(node.getId().equals("12")) {
+			System.out.println("5:--- " + node.getLinks());
+		}
+		int community = -1;
+		ArrayList<Set<String>> comunidades = new ArrayList<Set<String>>();
+		for(ArrayList<Node> com : this.solution){
+			Set<String>  temp = new HashSet<String>();
+			for(int i = 0; i < com.size();i++) {
+				temp.add(com.get(i).getId());
+			}
+			comunidades.add(temp);
+		}
+		Set<String> vecinos = new HashSet<String>();
+		for(String str :  Graphs.neighborListOf(this.Ginitial, node.getId())){
+			vecinos.add(str);
+		}
+		for(int i = 0; i < comunidades.size();i++){
+			Set<String> t = comunidades.get(i);
+			t.retainAll(vecinos);
+			comunidades.set(i,t);
+		}
+		ArrayList<Double> similarity = new ArrayList<Double>();
+
+		for(Set<String> comm : comunidades){
+			Double sim = new Double(0);
+			for(String str  : comm){
+				DefaultEdge edge =  Ginitial.getEdge(str,node.getId());
+				if(edge == null){
+					edge =  Ginitial.getEdge(node.getId(),str);
+				}
+				Double localSim = calcStructSim(edge, Ginitial) ;
+				if(localSim > sim){
+					sim = localSim;
+				}
+			}
+			similarity.add(sim);
+		}
+		Double bestSim = new Double(0);
+		int finalcomm = -1;
+		for(int i = 0; i < similarity.size();i++){
+			if(similarity.get(i) > bestSim){
+				bestSim = similarity.get(i);
+				finalcomm = i;
+			}
+		}
+		if(finalcomm != -1) {
+			ArrayList<Node> temp = this.solution.get(finalcomm);
+			temp.add(node);
+			this.solution.set(finalcomm, temp);
+			independetnNodes.remove(node);
+		}
 	}
 	
 	/** Calculates the structural similarity of 2 vertices

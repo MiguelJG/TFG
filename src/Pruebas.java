@@ -1,5 +1,6 @@
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.jgrapht.traverse.DepthFirstIterator;
 import org.jgrapht.traverse.GraphIterator;
 
@@ -13,7 +14,7 @@ import org.jgrapht.Graphs;
 public class Pruebas {
 	public static void main(String[] args) {
 		
-		Graph<String, DefaultEdge> G = new DefaultDirectedGraph<>(DefaultEdge.class);
+		Graph<String, DefaultEdge> G = new  DefaultUndirectedGraph<>(DefaultEdge.class);
 		GraphIO.loadGraph(G, "karate.txt");
 		System.out.println(G);
 		LED led = new LED("karate.txt");
