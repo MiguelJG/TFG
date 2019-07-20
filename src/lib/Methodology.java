@@ -3,6 +3,8 @@ package lib;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import java.util.ArrayList;
+import java.util.Set;
+
 import org.jgrapht.*;
 import org.jgrapht.traverse.*;
 
@@ -39,38 +41,111 @@ public class Methodology {
 	public ArrayList<String> compute(int metricOption,double belongPercentage){
 		ArrayList<String> results = new ArrayList<String>();
 		if(metricOption == 1) {// with modularity	
-			System.out.println("Init:" + modularity());//----------------debug
+			//System.out.println("Init:" + modularity());//----------------debug
 			results.add("Init:" + modularity()  + "|");
-			System.out.println("Data Size:" + data.size());
+			//System.out.println("Data Size:" + data.size());
 			for(int i = 0; i < data.size(); i++) {				
 				Double hMod = new Double(0); //higest modularity
 				ArrayList<Integer> community = new ArrayList<Integer>(); // listado de comunidades en las que puede entrar
+				ArrayList<Double> Modcommunity = new ArrayList<Double>(); // listado de modularidades de las comunidades en que puede entrar
 				Graph<String, DefaultEdge> prevG = G; // grafo inicial, solución inicial para no perderlo
 				ArrayList<ArrayList<Node>> prevSolution = solution;
+				//Se inserta el dato en el grafo
+				G.addVertex(data.get(i).getId());
+				for(String str : data.get(i).getLinks()) {
+					if(G.containsVertex(str)) {
+						G.addEdge(data.get(i).getId(), str);
+					}
+				}
+				//----
 				for(int j = 0; j < solution.size(); j++) {// itera por todas las comunidades
 					solution.get(j).add(data.get(i)); // se añade la posible solucion
-					G.addVertex(data.get(i).getId());
 					Double temp = this.modularity();
 					if( temp > hMod) {
-						hMod = temp;
 						community.add(j);
+						Modcommunity.add(temp);
+						hMod = temp;						
 					} else if (temp > ((belongPercentage / 100) * hMod)) {
 						community.add(j);
+						Modcommunity.add(temp);
 					}
 					G = prevG;// se establece el grafo inicial
 					solution = prevSolution;
 				}
-				for(Integer index: community) {
-					solution.get(index).add(data.get(i)); // se añade en las comunidades adecuadas
+				for(int j = 0; j < Modcommunity.size();j++) {
+					if(Modcommunity.get(j) < ((belongPercentage / 100) * hMod)) {
+						community.set(j, -1);
+					}
 				}
-				System.out.println(i + ":" + modularity());//----------------debug
+				for(Integer index: community) {
+					if(index != -1) {
+						solution.get(index).add(data.get(i)); // se añade en las comunidades adecuadas
+					}
+				}
+				//System.out.println(i + ":" + modularity());//----------------debug
 				results.add(i + ":" + modularity() + "|");
 			}
 
 		}
-		if(metricOption == 2 || metricOption == 3) {// con conductancia o grado medio
-			//TODO
-		}		
+		if(metricOption == 2) {//Similaridad Estructural promedio
+			//System.out.println("Init:" + modularity());//----------------debug
+			results.add("Init:" + modularity()  + "|");
+			//System.out.println("Data Size:" + data.size());
+			for(int i = 0; i < data.size(); i++) {				
+				Double hAStructS = new Double(0); //higest average Structural Similari
+				ArrayList<Integer> community = new ArrayList<Integer>(); // listado de comunidades en las que puede entrar
+				ArrayList<Double> StructSimcommunity = new ArrayList<Double>(); // listado de modularidades de las comunidades en que puede entrar
+				Graph<String, DefaultEdge> prevG = G; // grafo inicial, solución inicial para no perderlo
+				ArrayList<ArrayList<Node>> prevSolution = solution;
+				//Se inserta el dato en el grafo
+				G.addVertex(data.get(i).getId());
+				for(String str : data.get(i).getLinks()) {
+					if(G.containsVertex(str)) {
+						G.addEdge(data.get(i).getId(), str);
+					}					
+				}
+				//----
+				for(int j = 0; j < solution.size(); j++) {// itera por todas las comunidades
+					//-------------------------------------------------- solution.j comunidad data.i elemento a insertar
+					Double sum = 0.0;
+					int n = 0;
+					for(Node node : solution.get(j)) {
+						DefaultEdge edge = G.getEdge(node.getId(), data.get(i).getId());
+						if(edge == null) {
+							edge = G.getEdge(data.get(i).getId(),node.getId());
+						}
+						if(edge != null) {
+							sum += calcStructSim(edge);							
+						}
+						n++;
+					}
+					Double temp = sum / n;
+					//--------------------------------------------
+					if( temp > hAStructS) {
+						community.add(j);
+						StructSimcommunity.add(temp);
+						hAStructS = temp;						
+					} else if (temp > ((belongPercentage / 100) * hAStructS)) {
+						community.add(j);
+						StructSimcommunity.add(temp);
+					}
+					G = prevG;// se establece el grafo inicial
+					solution = prevSolution;
+				}
+				for(int j = 0; j < StructSimcommunity.size();j++) {
+					if(StructSimcommunity.get(j) < ((belongPercentage / 100) * hAStructS)) {
+						community.set(j, -1);
+					}
+				}
+				for(Integer index: community) {
+					if(index != -1) {
+						solution.get(index).add(data.get(i)); // se añade en las comunidades adecuadas
+					}
+				}
+				//System.out.println(i + ":" + modularity());//----------------debug
+				results.add(i + ":" + modularity() + "|");
+			}		
+		}
 		return results;
 	}
 	
@@ -171,10 +246,25 @@ public class Methodology {
 		return new Double(2 * (e.size() / c.size()));
 	}
 	
-	public double strucSim(int community) {
+	public double avgStrucSim(int community, String element) {
 		double structSim = 0;
 		//TODO
 		return structSim;
+	}
+	
+	/** Calculates the structural similarity of 2 vertices
+	 * @param edge
+	 * @param G
+	 * @return
+	 */
+	private Double calcStructSim(DefaultEdge edge) {
+		Set<String> u = Graphs.neighborSetOf(G, G.getEdgeSource(edge));
+		Set<String> v = Graphs.neighborSetOf(G, G.getEdgeTarget(edge));
+		int uSize = u.size();
+		int vSize = v.size();
+		u.retainAll(v);
+		int uIntervSize = u.size();
+		return (uIntervSize)/(Math.sqrt(uSize * vSize));
 	}
 	
 }

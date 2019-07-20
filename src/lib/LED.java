@@ -204,46 +204,6 @@ public class LED {
 	 * @param node
 	 */
 	void addTohihgestStrSim(Node node) {
-		//TODO revisar ----------------------------------------------------
-		/*
-		int community = -1;
-		Double structSim = 0.0;
-		if(node.getId().equals("5")) {
-			System.out.println("5:--- " + node.getLinks());
-		}
-		for(String vertice : node.getLinks()) {
-			String id = node.getId();
-			DefaultEdge temp = Ginitial.getEdge(id, vertice);
-			if(temp == null) {
-				temp = Ginitial.getEdge(vertice,id);
-				Double dummy = calcStructSim(temp,this.Ginitial);
-				if(structSim < dummy) {					
-					int newcommunity = getCommunity(vertice);
-					if(newcommunity != -1)
-						community = newcommunity;
-						structSim = dummy;
-				}
-			}else {
-				Double dummy = calcStructSim(temp,this.Ginitial);
-				if(structSim < dummy) {
-					int newcommunity = getCommunity(vertice);	
-					if(newcommunity != -1)
-						community = newcommunity;
-						structSim = dummy;
-				}
-			}
-		}
-		if(community != -1) {
-			ArrayList<Node> temp = this.solution.get(community);
-			temp.add(node);
-			this.solution.set(community, temp);
-			independetnNodes.remove(node);
-		}*/
-		/*else {
-			ArrayList<Node> temp = new ArrayList<Node>();
-			temp.add(node);
-			this.solution.add(temp);
-		}*/
 		if(node.getId().equals("12")) {
 			System.out.println("5:--- " + node.getLinks());
 		}
