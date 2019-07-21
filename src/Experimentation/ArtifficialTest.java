@@ -141,7 +141,8 @@ public class ArtifficialTest {
 		return this.M.compute(metric, percentage);//computing the methodology
 	}
 	
-	//TODO experiment with LED and artifficial data
+	//maybe experiment with LED and artifficial data
 
+	//maybe 2 phase time experiment
 
 }
