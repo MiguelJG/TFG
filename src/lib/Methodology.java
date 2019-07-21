@@ -42,7 +42,7 @@ public class Methodology {
 		ArrayList<String> results = new ArrayList<String>();
 		if(metricOption == 1) {// with modularity	
 			//System.out.println("Init:" + modularity());//----------------debug
-			results.add("Init:" + modularity()  + ",");
+			results.add("Init:" + modularity()  + "");
 			//System.out.println("Data Size:" + data.size());
 			for(int i = 0; i < data.size(); i++) {				
 				Double hMod = new Double(0); //higest modularity
@@ -83,13 +83,13 @@ public class Methodology {
 					}
 				}
 				//System.out.println(i + ":" + modularity());//----------------debug
-				results.add(i + ":" + modularity() + ",");
+				results.add(i + ":" + modularity() + "");
 			}
 
 		}
 		if(metricOption == 2) {//Similaridad Estructural promedio
 			//System.out.println("Init:" + modularity());//----------------debug
-			results.add("Init:" + modularity()  + ",");
+			results.add("Init:" + modularity()  + "");
 			//System.out.println("Data Size:" + data.size());
 			for(int i = 0; i < data.size(); i++) {				
 				Double hAStructS = new Double(0); //higest average Structural Similari
@@ -143,7 +143,7 @@ public class Methodology {
 					}
 				}
 				//System.out.println(i + ":" + modularity());//----------------debug
-				results.add(i + ":" + modularity() + ",");
+				results.add(i + ":" + modularity() + "");
 			}		
 		}
 		return results;
