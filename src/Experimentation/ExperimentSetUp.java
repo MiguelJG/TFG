@@ -13,8 +13,8 @@ public class ExperimentSetUp {
 		int numMetricas = 2;
 		FileWriter writer = new FileWriter(path + "resultadosArtifTest.txt");
 		BufferedWriter bw = new BufferedWriter(writer);
-		for(int nNodos = 10; nNodos < 1000; nNodos += 100) {
-			System.out.println(((nNodos - 10) / 990) + "%");
+		for(int nNodos = 5; nNodos < 100; nNodos += 5) {
+			System.out.println(nNodos + " < 100");
 			for(int nClusters = 2; nClusters < 10; nClusters++) {
 				int sNodes = (nNodos / nClusters) / 4;
 				for(double inNode = 10; inNode <= 80; inNode += 10) {
