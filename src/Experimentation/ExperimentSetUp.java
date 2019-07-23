@@ -16,7 +16,7 @@ public class ExperimentSetUp {
 		for(int nNodos = 5; nNodos < 100; nNodos += 5) {
 			System.out.println(nNodos + " < 100");
 			for(int nClusters = 2; nClusters < 10; nClusters++) {
-				int sNodes = (nNodos / nClusters) / 4;
+				int sNodes = (nNodos) / 4;
 				for(double inNode = 10; inNode <= 80; inNode += 10) {
 					for(int i = 1; i <= numMetricas; i++) {
 						ArtifficialTest instance = new ArtifficialTest();
@@ -47,8 +47,14 @@ public class ExperimentSetUp {
 		} 
 	 */
 	
+	public void debug() {
+		ArtifficialTest instance = new ArtifficialTest();
+		instance.computeDebug("result/metrica2.txt");
+	}
+	
 	public static void main(String[] argc) throws IOException {
 		ExperimentSetUp test = new ExperimentSetUp();
+		//test.debug();
 		test.experiment("result/");
 	}	
 }

@@ -1,4 +1,5 @@
 package Experimentation;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jgrapht.Graph;
@@ -145,4 +146,17 @@ public class ArtifficialTest {
 
 	//maybe 2 phase time experiment
 
+	
+	public void computeDebug(String path) {
+		this.createData(2, 10,1, (double) 25);//create a full artificial dataset and set the data with it
+		this.generateGrpah(2, 10, (double) 25);//generates the graph and cuts the initial data to the desire size and generate input data
+		//System.out.println(this.G);
+		this.M = new Methodology(this.G, this.initialData, inputData);//instance of the methodology		
+		try {
+			this.M.computeDebug(2,90, path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}//computing the methodology
+	}
 }

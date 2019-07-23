@@ -1,0 +1,72 @@
+Metrica 2
+Init:0.8571428571428571
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.8641622554797393, 0.8641622554797393]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+0:1.0588235294117647
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.8767107295305142, 0.8767107295305142]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+1:1.2682926829268293
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.8885618083164127, 0.8885618083164127]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+2:1.469387755102041
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.8988546237491596, 0.8988546237491596]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+3:1.6551724137931034
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.9076375127493704, 0.9076375127493704]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+4:1.8235294117647058
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.9151329339240878, 0.9151329339240878]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+5:1.9746835443037976
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.9215669173515396, 0.9215669173515396]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+6:2.10989010989011
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.17869307048525726, 0.17869307048525726]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+7:2.1030927835051547
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.2502232692426803, 0.2502232692426803]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+8:2.1153846153846154
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.3112605068359946, 0.3112605068359946]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+9:2.142857142857143
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.3636620673160768, 0.3636620673160768]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+10:2.1818181818181817
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.40899235517322835, 0.40899235517322835]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+11:2.2290076335877864
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.4485119043163087, 0.4485119043163087]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+12:2.2816901408450705
+Comunidad posibles: [0, 1]
+Similaridad estructural promedio por comunidad: [0.48322389137581456, 0.48322389137581456]
+Se añade en la comunidad 0
+Se añade en la comunidad 1
+13:2.3376623376623376
