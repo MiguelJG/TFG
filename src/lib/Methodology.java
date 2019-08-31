@@ -206,7 +206,7 @@ public class Methodology {
         }
 	}
         //System.out.println("eii:" + eii + " ai:" + ai);
-		return new Double(eii)/G.edgeSet().size() - new Double(Math.pow((ai/(2*G.edgeSet().size())), 2));
+		return (new Double(eii)/G.edgeSet().size() - new Double(Math.pow((ai/(2*G.edgeSet().size())), 2)))/(Math.sqrt(G.edgeSet().size()));
 	}
 	
 	/** Calculates the conductance for a given community

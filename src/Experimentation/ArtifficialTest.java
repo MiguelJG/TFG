@@ -131,9 +131,9 @@ public class ArtifficialTest {
 	 * @param ledAlpha alpha value of LED
 	 * @return
 	 */
-	public ArrayList<String> computeRealData(String FileName, int metric, double percentage,double initialNodes,double ledAlpha) {
-		GraphIO.loadGraph(this.G, FileName);//load graph from file
-		LED led = new LED(FileName);//load a LED (Loop edge detection) from file
+	public ArrayList<String> computeRealData(String FileName, int metric, double percentage,double initialNodes,double ledAlpha, int offset) {
+		GraphIO.loadGraph(this.G, FileName, offset);//load graph from file
+		LED led = new LED(FileName, offset);//load a LED (Loop edge detection) from file
 		led.compute(ledAlpha);//compute led with the given alpha
 		this.data =  led.getSolution(); // set data with the initial communities from LED
 		this.loadinitialData(initialNodes);//TODO revisar el grafo inicial hay que recortarlo //cut the initial data to the desire size and generate input data

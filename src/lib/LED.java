@@ -20,10 +20,10 @@ public class LED {
 	/** Constructor from file
 	 * @param Filename
 	 */
-	public LED(String Filename) {
+	public LED(String Filename, int offset) {
 		solution = new ArrayList<ArrayList<Node>>();
-		GraphIO.loadGraph(G, Filename);
-		GraphIO.loadGraph(Ginitial, Filename);
+		GraphIO.loadGraph(G, Filename, offset);
+		GraphIO.loadGraph(Ginitial, Filename, offset);
 		independetnNodes = new ArrayList<>();
 	}
 	
@@ -70,7 +70,7 @@ public class LED {
 		Boolean changeDetected = true;
 		while(independetnNodes.size() > 0 && changeDetected) {
 			for(int i = 0; i < independetnNodes.size(); i++) { // extend initial communities adding isolated vertices
-				System.out.println("Add to hihges: " + independetnNodes.get(i));
+				//System.out.println("Add to hihges: " + independetnNodes.get(i));
 				addTohihgestStrSim(independetnNodes.get(i));
 			}
 			//if(previndependetnNodes.equals(independetnNodes)) {
@@ -147,7 +147,7 @@ public class LED {
 				independetnNodes.add(temp);
 			} else { //si la componente tiene mas de un elemento se marca como comunidad inicial
 				this.solution.add(community);
-				System.out.println("Comunidad inicial detectada");
+				//System.out.println("Comunidad inicial detectada");
 			}
 		} else {
 			for(Set<String> commponent : interconnectedComponents) {
@@ -205,7 +205,7 @@ public class LED {
 	 */
 	void addTohihgestStrSim(Node node) {
 		if(node.getId().equals("12")) {
-			System.out.println("5:--- " + node.getLinks());
+			//System.out.println("5:--- " + node.getLinks());
 		}
 		int community = -1;
 		ArrayList<Set<String>> comunidades = new ArrayList<Set<String>>();

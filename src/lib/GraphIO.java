@@ -20,7 +20,7 @@ public class GraphIO {
 	 * @param G
 	 * @param Filename
 	 */
-	public static void loadGraph(Graph<String, DefaultEdge> G, String Filename) {
+	public static void loadGraph(Graph<String, DefaultEdge> G, String Filename,int offset) {
 		 try {
 			 File f = new File(Filename);
 	         BufferedReader b = new BufferedReader(new FileReader(f));
@@ -28,7 +28,7 @@ public class GraphIO {
 	         b.readLine(); // quitamos el nombre e info extra
 	         readLine = b.readLine(); // extraemos el numero de elementos del grafo
 	         for(int i = 0; i < new Integer(readLine.replaceAll("//s+", "")); i++) {
-	        	 G.addVertex(new Integer(i + 1).toString());// se añaden los vertices
+	        	 G.addVertex(new Integer(i + offset).toString());// se añaden los vertices
 	         }
 	         while ((readLine = b.readLine()) != null) { // se añaden los enlaces
 	        	 for(String str : readLine.split(",")) {

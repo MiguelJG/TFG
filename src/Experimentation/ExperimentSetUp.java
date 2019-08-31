@@ -36,6 +36,19 @@ public class ExperimentSetUp {
 		//TODO experimentos con artificial data comunidades iniciales LED
 		//TODO experimentos con real data and LED
 	}
+	
+	void experiment_real_data() {
+		for(int i = 10; i <= 100; i += 20) {
+			ArtifficialTest instance = new ArtifficialTest();
+			System.out.println("Karate: " + i + "%" + instance.computeRealData("karate.txt", 1, 20, i, 0.5,1));
+		}
+		for(int i = 10; i <= 100; i += 20) {
+			ArtifficialTest instance = new ArtifficialTest();
+			System.out.println("Football: " + i + "%" + instance.computeRealData("football.txt", 1, 20, i, 0.5,0));
+		}
+	}
+	
+	
 	/*
 	 try (FileWriter writer = new FileWriter("app.log");
 		 BufferedWriter bw = new BufferedWriter(writer)) {
@@ -55,6 +68,7 @@ public class ExperimentSetUp {
 	public static void main(String[] argc) throws IOException {
 		ExperimentSetUp test = new ExperimentSetUp();
 		//test.debug();
-		test.experiment("result/");
+		//test.experiment("result/");
+		test.experiment_real_data();
 	}	
 }
